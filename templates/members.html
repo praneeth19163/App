@@ -24,121 +24,22 @@
             <button type="submit">Add Member</button>
         </form>
     </div>
-    <!-- <script>
-        const apiUrl = '/member';
-        const userRole = '{{ role }}';
-        const username = '{{ username }}';
-
-        if (userRole === 'admin') {
-            document.getElementById('addMemberForm').style.display = 'block';
-        }
-
-        async function fetchMembers() {
-            const token = localStorage.getItem('token');
-            console.log(`Fetching members with token: ${token}`);
-            const response = await fetch(apiUrl, {
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const data = await response.json();
-            console.log(`Members response: ${JSON.stringify(data)}`);
-            const membersDiv = document.getElementById('members');
-            membersDiv.innerHTML = '';
-            data.members.forEach(member => {
-                const memberDiv = document.createElement('div');
-                memberDiv.className = 'member';
-                memberDiv.innerHTML = `
-                    <p>ID: ${member.id}</p>
-                    <p>Name: <input type="text" value="${member.name}" data-id="${member.id}" data-field="name"></p>
-                    <p>Email: <input type="email" value="${member.email}" data-id="${member.id}" data-field="email"></p>
-                    <p>Level: <input type="text" value="${member.level}" data-id="${member.id}" data-field="level"></p>
-                    ${userRole === 'admin' || member.id === username ? `<button onclick="updateMember('${member.id}')">Update</button>` : ''}
-                    ${userRole === 'admin' ? `<button onclick="deleteMember('${member.id}')">Delete</button>` : ''}
-                `;
-                membersDiv.appendChild(memberDiv);
-            });
-        }
-
-        document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('id').value;
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const level = document.getElementById('level').value;
-            const role = document.getElementById('role').value;
-            const token = localStorage.getItem('token');
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({ id, name, email, level, role })
-            });
-            const data = await response.json();
-            if (data.message) {
-                alert(data.message);
-                fetchMembers();
-            }
-            document.getElementById('addMemberForm').reset();
-        });
-
-        async function updateMember(id) {
-            const name = document.querySelector(`input[data-id="${id}"][data-field="name"]`).value;
-            const email = document.querySelector(`input[data-id="${id}"][data-field="email"]`).value;
-            const level = document.querySelector(`input[data-id="${id}"][data-field="level"]`).value;
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({ name, email, level })
-            });
-            const data = await response.json();
-            if (data.message) {
-                alert(data.message);
-                fetchMembers();
-            }
-        }
-
-        async function deleteMember(id) {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`${apiUrl}/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': token
-                }
-            });
-            const data = await response.json();
-            if (data.message) {
-                alert(data.message);
-                fetchMembers();
-            }
-        }
-
-        fetchMembers();
-    </script> -->
 
     <script>
         const apiUrl = 'http://localhost:5000/member';
         const userRole = '{{ role }}';
         const username = '{{ username }}';
     
-        // Show the Add Member form if user is admin
         if (userRole === 'admin') {
             document.getElementById('addMemberForm').style.display = 'block';
         }
     
-        // Utility function to get token and validate
         function getToken() {
             const token = localStorage.getItem('token');
             if (!token) {
                 console.error('No token found. Please log in first.');
                 alert('Session expired. Please log in again.');
-                window.location.href = '/login'; // Redirect to login page
+                window.location.href = '/login'; 
             }
             return token;
         }
@@ -153,7 +54,7 @@
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // ✅ Authorization Header
+                        'Authorization': `Bearer ${token}`
                     }
                 });
     
@@ -186,7 +87,6 @@
             }
         }
     
-        // Add Member Form Submission
         document.getElementById('addMemberForm').addEventListener('submit', async (e) => {
             e.preventDefault();
     
@@ -202,7 +102,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // ✅ Authorization Header
+                        'Authorization': `Bearer ${token}` 
                     },
                     body: JSON.stringify({ id, name, email, level, role })
                 });
@@ -222,7 +122,6 @@
             }
         });
     
-        // Update Member Function
         async function updateMember(id) {
             const name = document.querySelector(`input[data-id="${id}"][data-field="name"]`).value;
             const email = document.querySelector(`input[data-id="${id}"][data-field="email"]`).value;
@@ -234,7 +133,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}` // ✅ Authorization Header
+                        'Authorization': `Bearer ${token}` 
                     },
                     body: JSON.stringify({ name, email, level })
                 });
@@ -253,7 +152,6 @@
             }
         }
     
-        // Delete Member Function
         async function deleteMember(id) {
             const token = getToken();
     
@@ -261,7 +159,7 @@
                 const response = await fetch(`${apiUrl}/${id}`, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${token}` // ✅ Authorization Header
+                        'Authorization': `Bearer ${token}` 
                     }
                 });
     
@@ -278,8 +176,6 @@
                 alert(error.message);
             }
         }
-    
-        // Initial Fetch
         fetchMembers();
     </script>
     
